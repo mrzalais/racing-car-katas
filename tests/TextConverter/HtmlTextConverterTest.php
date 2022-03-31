@@ -11,7 +11,7 @@ class HtmlTextConverterTest extends TestCase
 {
     private string $pathToTextFile;
 
-    public function setUp() : void
+    public function setUp(): void
     {
         $this->pathToTextFile = __DIR__ . '/text.txt';
         parent::setUp();
