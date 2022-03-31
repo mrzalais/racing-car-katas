@@ -33,7 +33,6 @@ class HtmlPagesConverter
         while (($line = fgets($file)) !== false) {
             $line = rtrim($line);
             if (str_contains($line, 'PAGE_BREAK')) {
-                $pageBreakPosition = ftell($file);
                 $this->breaks[] = ftell($file);
             }
         }
@@ -42,19 +41,21 @@ class HtmlPagesConverter
     }
 
     /**
-     * @throws FileNotFoundException|LineNotFoundException
+     * @throws FileNotFoundException
+     * @throws LineNotFoundException
      */
     public function getHtmlPage(int $page = 0): string
     {
-        if (!file_exists($this->filename)) {
-            throw new FileNotFoundException;
-        }
+        return $this->processHtmlPage($page);
+    }
 
-        $file = fopen($this->filename, 'r');
-
-        if ($file === false) {
-            throw new FileNotFoundException;
-        }
+    /**
+     * @throws FileNotFoundException
+     * @throws LineNotFoundException
+     */
+    private function processHtmlPage(int $page): string
+    {
+        $file = $this->getFile();
 
         $pageStart = $this->breaks[$page];
         $pageEnd = $this->breaks[$page + 1];
@@ -75,7 +76,25 @@ class HtmlPagesConverter
             $html .= '<br />';
         }
         fclose($file);
+
         return $html;
+    }
+
+    /**
+     * @throws FileNotFoundException
+     */
+    private function getFile()
+    {
+        if (!file_exists($this->filename)) {
+            throw new FileNotFoundException;
+        }
+
+        $file = fopen($this->filename, 'r');
+
+        if ($file === false) {
+            throw new FileNotFoundException;
+        }
+        return $file;
     }
 
     public function getFileName(): string
