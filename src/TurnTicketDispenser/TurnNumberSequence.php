@@ -6,10 +6,11 @@ namespace RacingCar\TurnTicketDispenser;
 
 class TurnNumberSequence
 {
-    private static $turnNumber = 0;
+    private int $turnNumber = 0;
 
-    public static function nextTurn()
+    public function nextTurn(): int
     {
-        return self::$turnNumber++;
+        ++$this->turnNumber;
+        return $this->turnNumber;
     }
 }
