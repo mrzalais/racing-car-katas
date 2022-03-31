@@ -11,9 +11,9 @@ class TelemetryClient
 {
     public const DIAGNOSTIC_MESSAGE = 'AT#UD';
 
-    private $onlineStatus = false;
+    private bool $onlineStatus = false;
 
-    private $diagnosticMessageJustSent = false;
+    private bool $diagnosticMessageJustSent = false;
 
     /**
      * @throws Exception
@@ -67,7 +67,7 @@ class TelemetryClient
         if ($this->diagnosticMessageJustSent) {
             // simulate a status report
             $message =
-"LAST TX rate................ 100 MBPS\r\n
+                "LAST TX rate................ 100 MBPS\r\n
 HIGHEST TX rate............. 100 MBPS\r\n
 LAST RX rate................ 100 MBPS\r\n
 HIGHEST RX rate............. 100 MBPS\r\n
@@ -95,8 +95,13 @@ Remote Rtrn Count........... 00";
         return $message;
     }
 
-    public function getOnlineStatus()
+    public function getOnlineStatus(): bool
     {
         return $this->onlineStatus;
+    }
+
+    public function getDiagnosticMessageWasSent(): bool
+    {
+        return $this->diagnosticMessageJustSent;
     }
 }

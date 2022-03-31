@@ -5,27 +5,46 @@ declare(strict_types=1);
 namespace RacingCar\TelemetrySystem;
 
 use Exception;
+use RuntimeException;
 
 class TelemetryDiagnosticControls
 {
     public const DIAGNOSTIC_CHANNEL_CONNECTION_STRING = '*111#';
 
-    public $diagnosticInfo = '';
+    public string $diagnosticInfo = '';
 
-    private $telemetryClient;
+    public TelemetryClient $telemetryClient;
 
-    public function __construct()
+    public function __construct(TelemetryClient $telemetryClient)
     {
-        $this->telemetryClient = new TelemetryClient();
+        $this->telemetryClient = $telemetryClient;
     }
 
     /**
      * @throws Exception
      */
-    public function checkTransmission(): void
+    public function checkTransmissionSend(): void
     {
-        $this->diagnosticInfo = '';
+        $this->prepareTransmission();
 
+        $this->telemetryClient->send(TelemetryClient::DIAGNOSTIC_MESSAGE);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function checkTransmissionReceive(): void
+    {
+        $this->prepareTransmission();
+
+        $this->diagnosticInfo = $this->telemetryClient->receive();
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function prepareTransmission(): void
+    {
         $this->telemetryClient->disconnect();
 
         $retryLeft = 3;
@@ -35,10 +54,7 @@ class TelemetryDiagnosticControls
         }
 
         if ($this->telemetryClient->getOnlineStatus() === false) {
-            throw new Exception('Unable to connect.');
+            throw new RuntimeException('Unable to connect.');
         }
-
-        $this->telemetryClient->send(TelemetryClient::DIAGNOSTIC_MESSAGE);
-        $this->diagnosticInfo = $this->telemetryClient->receive();
     }
 }
