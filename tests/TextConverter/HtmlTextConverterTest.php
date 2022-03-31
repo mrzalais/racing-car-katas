@@ -9,9 +9,27 @@ use RacingCar\TextConverter\HtmlTextConverter;
 
 class HtmlTextConverterTest extends TestCase
 {
-    public function testFoo(): void
+    private string $pathToTextFile;
+
+    public function setUp() : void
     {
-        $converter = new HtmlTextConverter('foo');
-        $this->assertSame('fixme', $converter->getFileName());
+        $this->pathToTextFile = __DIR__ . '/text.txt';
+        parent::setUp();
+    }
+
+    public function testItReturnsCorrectPathToFile(): void
+    {
+        $converter = new HtmlTextConverter($this->pathToTextFile);
+        $this->assertSame($this->pathToTextFile, $converter->getFileNameWithPath());
+    }
+
+    public function testItConvertsTextToHtml(): void
+    {
+        $converter = new HtmlTextConverter($this->pathToTextFile);
+
+        $this->assertEquals(
+            'Lorem ipsum dolor sit amet,<br />consectetur adipiscing elit,<br />sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.<br />',
+            $converter->convertToHtml()
+        );
     }
 }
