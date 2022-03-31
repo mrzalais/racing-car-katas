@@ -12,22 +12,20 @@ class TicketDispenserTest extends TestCase
 {
     public function testGetNewTicket(): void
     {
-        $dispenser = new TicketDispenser();
-        $turnNumberSequence = new TurnNumberSequence;
+        $dispenser = new TicketDispenser(new TurnNumberSequence);
 
-        $ticket = $dispenser->getTurnTicket($turnNumberSequence->nextTurn());
+        $ticket = $dispenser->getTurnTicket();
         $this->assertSame(1, $ticket->getTurnNumber());
     }
 
     public function testGetMultipleTickets(): void
     {
-        $dispenser = new TicketDispenser();
-        $turnNumberSequence = new TurnNumberSequence;
+        $dispenser = new TicketDispenser(new TurnNumberSequence);
 
-        $ticket = $dispenser->getTurnTicket($turnNumberSequence->nextTurn());
+        $ticket = $dispenser->getTurnTicket();
         $this->assertSame(1, $ticket->getTurnNumber());
 
-        $ticket = $dispenser->getTurnTicket($turnNumberSequence->nextTurn());
+        $ticket = $dispenser->getTurnTicket();
         $this->assertSame(2, $ticket->getTurnNumber());
     }
 }

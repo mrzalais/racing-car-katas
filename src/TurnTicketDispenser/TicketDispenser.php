@@ -6,8 +6,15 @@ namespace RacingCar\TurnTicketDispenser;
 
 class TicketDispenser
 {
-    public function getTurnTicket(int $currentTurn): TurnTicket
+    private TurnNumberSequence $turnNumberSequence;
+
+    public function __construct(TurnNumberSequence $turnNumberSequence)
     {
-        return new TurnTicket($currentTurn);
+        $this->turnNumberSequence = $turnNumberSequence;
+    }
+
+    public function getTurnTicket(): TurnTicket
+    {
+        return new TurnTicket($this->turnNumberSequence->nextTurn());
     }
 }

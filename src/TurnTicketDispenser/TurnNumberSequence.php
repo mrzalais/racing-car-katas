@@ -10,7 +10,6 @@ class TurnNumberSequence
 
     public function nextTurn(): int
     {
-        ++$this->turnNumber;
-        return $this->turnNumber;
+        return ++$this->turnNumber;
     }
 }
