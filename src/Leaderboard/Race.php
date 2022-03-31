@@ -8,11 +8,11 @@ class Race
 {
     private static $points = [25, 18, 15];
 
-    private $name;
+    private string $name;
 
-    private $drivers;
+    private array$drivers;
 
-    private $driverNames;
+    private array $driverNames;
 
     /**
      * @param Driver[]  $drivers
@@ -32,7 +32,7 @@ class Race
         }
     }
 
-    public function getPosition($driver): int
+    public function getPosition(Driver $driver): int|string|false
     {
         return array_search($driver, $this->drivers, true);
     }
@@ -42,6 +42,9 @@ class Race
         return self::$points[$this->getPosition($driver)];
     }
 
+    /**
+     * @return Driver[]
+     */
     public function getResults(): array
     {
         return $this->drivers;
