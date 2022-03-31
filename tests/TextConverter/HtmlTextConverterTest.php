@@ -6,6 +6,7 @@ namespace Tests\TextConverter;
 
 use PHPUnit\Framework\TestCase;
 use RacingCar\TextConverter\HtmlTextConverter;
+use RacingCar\TextConverter\Exceptions\FileNotFoundException;
 
 class HtmlTextConverterTest extends TestCase
 {
@@ -31,5 +32,15 @@ class HtmlTextConverterTest extends TestCase
             'Lorem ipsum dolor sit amet,<br />consectetur adipiscing elit,<br />sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.<br />',
             $converter->convertToHtml()
         );
+    }
+
+    /**
+     * @throws FileNotFoundException
+     */
+    public function testItThrowsExceptionIfProvidedFilePathIsInvalid(): void
+    {
+        $converter = new HtmlTextConverter('invalid');
+        $this->expectException(FileNotFoundException::class);
+        $converter->convertToHtml();
     }
 }
